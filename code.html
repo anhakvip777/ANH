@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang web chọn món ăn yêu thích với hai bước đơn giản.">
+    <title>Chọn Món Ăn Yêu Thích</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .page {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .dish {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        .dish img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.secondary {
+            background-color: #f44336;
+        }
+        button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        input[type="date"], input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chọn Món Ăn Yêu Thích</h1>
+    
+    <!-- Trang 1: Chọn ngày -->
+    <div id="page1" class="page active">
+        <h2>Chọn Thời Gian</h2>
+        <p>Hãy chọn ngày bạn muốn đặt món ăn.</p>
+        <label for="ngay">Ngày:</label>
+        <input type="date" id="ngay" name="ngay" required>
+        <br><br>
+        <button onclick="nextPage()">Đồng Ý</button>
+    </div>
+    
+    <!-- Trang 2: Chọn món ăn -->
+    <div id="page2" class="page">
+        <h2>Chọn Món Ăn</h2>
+        <p>Chọn những món ăn bạn thích từ danh sách dưới đây. Sau khi chọn, nhấn "Gửi" để gửi lựa chọn.</p>
+        
+        <form id="foodForm" action="https://formspree.io/f/your-form-id" method="POST"> <!-- Thay bằng URL thực tế nếu dùng Formspree hoặc backend -->
+            <input type="hidden" name="ngay" id="hiddenNgay"> <!-- Lưu ngày đã chọn -->
+            
+            <!-- Món 1: Bún Đậu -->
+            <div class="dish">
+                <img src="https://images.unsplash.com/photo-1551782450-17144efb5723?w=100&h=100&fit=crop" alt="Bún Đậu">
+                <div>
+                    <input type="checkbox" id="bun-dau" name="mon-an" value="Bún Đậu">
+                    <label for="bun-dau">Bún Đậu</label>
+                </div>
+            </div>
+            
+            <!-- Món 2: Bánh Xèo -->
+            <div class="dish">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=100&h=100&fit=crop" alt="Bánh Xèo">
+                <div>
+                    <input type="checkbox" id="banh-xeo" name="mon-an" value="Bánh Xèo">
+                    <label for="banh-xeo">Bánh Xèo</label>
+                </div>
+            </div>
+            
+            <!-- Món 3: Sushi -->
+            <div class="dish">
+                <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=100&h=100&fit=crop" alt="Sushi">
+                <div>
+                    <input type="checkbox" id="sushi" name="mon-an" value="Sushi">
+                    <label for="sushi">Sushi</label>
+                </div>
+            </div>
+            
+            <!-- Món 4: Bánh Tráng Trộn -->
+            <div class="dish">
+                <img src="https://images.unsplash.com/photo-1582515073490-39981397c445?w=100&h=100&fit=crop" alt="Bánh Tráng Trộn"> <!-- Ảnh mới cho Bánh Tráng Trộn -->
+                <div>
+                    <input type="checkbox" id="banh-trang-tron" name="mon-an" value="Bánh Tráng Trộn">
+                    <label for="banh-trang-tron">Bánh Tráng Trộn</label>
+                </div>
+            </div>
+            
+            <!-- Món 5: Đồ Nướng -->
+            <div class="dish">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=100&h=100&fit=crop" alt="Đồ Nướng">
+                <div>
+                    <input type="checkbox" id="do-nuong" name="mon-an" value="Đồ Nướng">
+                    <label for="do-nuong">Đồ Nướng</label>
+                </div>
+            </div>
+            
+            <br>
+            <label for="ten">Tên của bạn:</label>
+            <input type="text" id="ten" name="ten" required>
+            
+            <br><br>
+            <button type="button" class="secondary" onclick="prevPage()">Quay Lại</button>
+            <button type="submit">Gửi Lựa Chọn</button>
+        </form>
+    </div>
+    
+    <script>
+        function nextPage() {
+            const ngay = document.getElementById('ngay').value;
+            if (!ngay) {
+                alert('Vui lòng chọn ngày!');
+                return;
+            }
+            // Lưu ngày vào hidden input
+            document.getElementById('hiddenNgay').value = ngay;
+            // Chuyển trang
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+        
+        function prevPage() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        }
+        
+        // Validation trước khi submit
+        document.getElementById('foodForm').addEventListener('submit', function(e) {
+            const checkboxes = document.querySelectorAll('input[name="mon-an"]:checked');
+            if (checkboxes.length === 0) {
+                alert('Vui lòng chọn ít nhất một món ăn!');
+                e.preventDefault();
+                return;
+            }
+            alert('Cảm ơn bạn đã chọn! Lựa chọn sẽ được gửi.');
+        });
+    </script>
+</body>
+</html>
